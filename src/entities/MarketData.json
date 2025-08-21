@@ -1,0 +1,53 @@
+{
+  "name": "MarketData",
+  "type": "object",
+  "properties": {
+    "symbol": {
+      "type": "string",
+      "description": "Trading pair symbol"
+    },
+    "current_price": {
+      "type": "number",
+      "description": "Current price"
+    },
+    "price_change_24h": {
+      "type": "number",
+      "description": "24h price change percentage"
+    },
+    "volume_24h": {
+      "type": "number",
+      "description": "24h volume"
+    },
+    "high_24h": {
+      "type": "number",
+      "description": "24h high price"
+    },
+    "low_24h": {
+      "type": "number",
+      "description": "24h low price"
+    },
+    "market_cap": {
+      "type": "number",
+      "description": "Market capitalization"
+    },
+    "funding_rate": {
+      "type": "number",
+      "description": "Current funding rate for perpetual futures"
+    },
+    "open_interest": {
+      "type": "number",
+      "description": "Open interest in USD"
+    },
+    "fear_greed_index": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Market fear and greed index"
+    }
+  },
+  "required": [
+    "symbol",
+    "current_price"
+  ]
+}
+

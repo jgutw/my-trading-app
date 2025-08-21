@@ -1,0 +1,112 @@
+{
+  "name": "TradingSignal",
+  "type": "object",
+  "properties": {
+    "symbol": {
+      "type": "string",
+      "description": "Trading pair symbol (e.g., BTCUSDT)"
+    },
+    "signal_type": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "description": "Trading signal type"
+    },
+    "strength": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Signal strength percentage"
+    },
+    "entry_price": {
+      "type": "number",
+      "description": "Suggested entry price"
+    },
+    "target_price": {
+      "type": "number",
+      "description": "Target price for the trade"
+    },
+    "stop_loss": {
+      "type": "number",
+      "description": "Stop loss price"
+    },
+    "timeframe": {
+      "type": "string",
+      "enum": [
+        "1m",
+        "5m",
+        "15m",
+        "1h",
+        "4h",
+        "1d"
+      ],
+      "description": "Analysis timeframe"
+    },
+    "indicators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Indicator name (e.g., RSI, MACD, EMA)"
+          },
+          "value": {
+            "type": "number",
+            "description": "Current indicator value"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "bullish",
+              "bearish",
+              "neutral"
+            ],
+            "description": "Indicator signal status"
+          }
+        }
+      },
+      "description": "Technical indicators used for this signal"
+    },
+    "market_cap": {
+      "type": "number",
+      "description": "Market cap of the asset"
+    },
+    "volume_24h": {
+      "type": "number",
+      "description": "24-hour trading volume"
+    },
+    "price_change_24h": {
+      "type": "number",
+      "description": "24-hour price change percentage"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "executed",
+        "expired",
+        "cancelled"
+      ],
+      "default": "active",
+      "description": "Signal status"
+    },
+    "confidence_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "AI confidence score for the signal"
+    }
+  },
+  "required": [
+    "symbol",
+    "signal_type",
+    "strength",
+    "entry_price",
+    "timeframe"
+  ]
+}
+
