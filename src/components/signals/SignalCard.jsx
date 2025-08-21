@@ -1,3 +1,4 @@
+// src/components/signals/SignalCard.jsx
 import React from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,10 +13,13 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function SignalCard({ signal }) {
+export default function SignalCard({ signal, showRSI, showMACD, showEMA, showBB, showATR }) {
+  // Guard clause for invalid signal data
+  if (!signal || !signal.indicators) return <div className="text-slate-500">Loading signal...</div>;
+
   const isLong = signal.signal_type === "BUY";
   const strength = signal.strength || 0;
-  
+
   const getStrengthColor = (strength) => {
     if (strength >= 80) return "text-green-400 bg-green-400/10";
     if (strength >= 60) return "text-cyan-400 bg-cyan-400/10";
@@ -28,6 +32,15 @@ export default function SignalCard({ signal }) {
       ? "border-green-400/20 bg-green-400/5" 
       : "border-red-400/20 bg-red-400/5";
   };
+
+  // Filter indicators based on toggle props
+  const visibleIndicators = signal.indicators.filter(indicator => 
+    (indicator.name === 'RSI' && showRSI) ||
+    (indicator.name === 'MACD' && showMACD) ||
+    (indicator.name === 'EMA' && showEMA) ||
+    (indicator.name === 'Bollinger Bands' && showBB) ||
+    (indicator.name === 'ATR' && showATR)
+  );
 
   return (
     <motion.div
@@ -54,7 +67,6 @@ export default function SignalCard({ signal }) {
                 <p className="text-sm text-slate-400">{signal.timeframe} timeframe</p>
               </div>
             </div>
-            
             <Badge 
               variant="outline" 
               className={`${getStrengthColor(strength)} border-current font-semibold`}
@@ -86,7 +98,6 @@ export default function SignalCard({ signal }) {
               </div>
               <p className="font-semibold text-white">${signal.entry_price?.toFixed(4)}</p>
             </div>
-            
             {signal.target_price && (
               <div className="bg-slate-800/50 p-3 rounded-lg">
                 <div className="flex items-center gap-2 mb-1">
@@ -96,7 +107,6 @@ export default function SignalCard({ signal }) {
                 <p className="font-semibold text-green-400">${signal.target_price?.toFixed(4)}</p>
               </div>
             )}
-            
             {signal.stop_loss && (
               <div className="bg-slate-800/50 p-3 rounded-lg">
                 <div className="flex items-center gap-2 mb-1">
@@ -109,24 +119,25 @@ export default function SignalCard({ signal }) {
           </div>
 
           {/* Indicators */}
-          {signal.indicators && signal.indicators.length > 0 && (
+          {visibleIndicators.length > 0 && (
             <div className="space-y-2">
               <p className="text-sm font-medium text-slate-400 flex items-center gap-2">
                 <Activity className="w-4 h-4" />
                 Technical Indicators
               </p>
               <div className="flex flex-wrap gap-2">
-                {signal.indicators.slice(0, 4).map((indicator, index) => (
+                {visibleIndicators.map((indicator, index) => (
                   <Badge 
                     key={index}
                     variant="outline" 
                     className={`text-xs ${
-                      indicator.status === 'bullish' ? 'text-green-400 border-green-400/30' :
-                      indicator.status === 'bearish' ? 'text-red-400 border-red-400/30' :
+                      indicator.status.includes('bullish') ? 'text-green-400 border-green-400/30' :
+                      indicator.status.includes('bearish') ? 'text-red-400 border-red-400/30' :
+                      indicator.status.includes('neutral') || indicator.status.includes('low') ? 'text-yellow-400 border-yellow-400/30' :
                       'text-slate-400 border-slate-600'
                     }`}
                   >
-                    {indicator.name}: {indicator.value?.toFixed(2)}
+                    {indicator.name}: {indicator.name === 'Bollinger Bands' ? indicator.value : indicator.value.toFixed(2)}
                   </Badge>
                 ))}
               </div>
@@ -156,4 +167,6 @@ export default function SignalCard({ signal }) {
     </motion.div>
   );
 }
+
+
 

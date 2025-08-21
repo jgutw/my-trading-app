@@ -31,7 +31,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     loadSignals();
-    const interval = setInterval(loadSignals, 30000); // Update every 30 seconds
+    const interval = setInterval(loadSignals, 300000); // Update every 5 min 
     return () => clearInterval(interval);
   }, []);
 
